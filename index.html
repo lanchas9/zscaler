@@ -104,9 +104,7 @@
     let jsonFile3 = 'https://mosaico.app:3000/dbPosicionMosaico'
     var arrayPosicionesMosaico = [];
     var arrayScreenSaver = [];
-    var ganadorTrivia = {
-        id: 48
-    };
+    var ganadorTrivia = [48,0,8];
 
     function hayactualizacionJSON(){
         let jsonFileDate = 'https://mosaico.app:3000/dbPosicionMosaicoTimeStamp'
@@ -317,8 +315,8 @@
         // botonPrivacidad.enabled = false;
         var modalidadDeBotonBuscar  = false;
         var modalidadCuadriculaPNG = false;
-        var screenSaverTime = 20;
-        var actualizacionJSONtime = 80;
+        var screenSaverTime = 10;
+        var actualizacionJSONtime = 40;
         
         let popUp = new PIXI.Graphics();
         var inputLabel ;
@@ -696,7 +694,7 @@
                 break;
                 case 2:
                     timer += 1;
-                    if (randomIndex === ganadorTrivia.id){
+                    if (ganadorTrivia.includes(randomIndex)){
                         if (iniciaConfetti) {
                             setupConfetti()
                             iniciaConfetti=false
