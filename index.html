@@ -47,7 +47,7 @@
         let imgPortada;
         let resizeFactor = 2;
         let velocidadAnimacionFactor = 4;
-        let alphaCuadricula = 0.20;
+        let alphaCuadricula = 0.70;
         let catalogoTiposPantalla = {"vertical" : 1, "horizontal":2}
         let tipoPantalla = catalogoTiposPantalla.vertical
         // console.log('prueba')
@@ -91,7 +91,7 @@
     var arrayHotZones = [];
     var arrayHotZonesBackup = [];
     var direccionWeb = 'https://mosaico.app/gallery/api/public/clients/'
-    var jsonFile = 'https://mosaico.app:4320/v1/clients/static/85deec4e-1bda-459e-96a6-9d75c51a2899-FullTrust';
+    var jsonFile = 'https://mosaico.app:4320/v1/clients/static/85deec4e-1bda-459e-96a6-9d75c51a28990-Zscaler';
     // var jsonFile = 'table.json'
     // let pathSkandia = 'https://mosaico.app:4320/public/'
     // let pathSkandia = 'https://mosaico.app/gallery/api/public/clients/'
@@ -104,7 +104,8 @@
     let jsonFile3 = 'https://mosaico.app:3000/dbPosicionMosaico'
     var arrayPosicionesMosaico = [];
     var arrayScreenSaver = [];
-    var ganadorTrivia = [48,0,8];
+    let jsonFile4 = 'https://mosaico.app:3000/dbGanadorTrivia'
+    var arrayGanadorTrivia = [];
 
     function hayactualizacionJSON(){
         let jsonFileDate = 'https://mosaico.app:3000/dbPosicionMosaicoTimeStamp'
@@ -211,6 +212,27 @@
             terminamosLoading = terminamosLoading + 1;
             console.error('Error:', jsonFile3)
         })
+
+        fetch(jsonFile4)
+            .then(response => response.json())
+            .then(dataOriginal => {
+                let data = dataOriginal.bdFotos
+                arrayGanadorTrivia = [];
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        var item = data[key];
+                        arrayGanadorTrivia.push(
+                            item
+                        );
+                    }
+                }
+                console.log('DB arrayGanadorTrivia:' + arrayGanadorTrivia.length);
+                // terminamosLoading = terminamosLoading + 1;
+            })
+            .catch(error => {
+            // terminamosLoading = terminamosLoading + 1;
+            console.error('Error:', jsonFile4)
+        })
     }
         hayactualizacionJSON()
         //document.body.appendChild(app.view);
@@ -219,8 +241,8 @@
         let indexScreenSaver = 0;
         let contadorScreensaver = 0
         let primeraVezLoading = true;
-        const cuadriculaHorizontal = 9;
-        const cuadriculaVertial = 16;
+        const cuadriculaHorizontal = 11;
+        const cuadriculaVertial = 18;
         const porcentajePopImagen = .8;
         let terminamosLoading = 0;
         let hayBanner = false;
@@ -315,8 +337,8 @@
         // botonPrivacidad.enabled = false;
         var modalidadDeBotonBuscar  = false;
         var modalidadCuadriculaPNG = false;
-        var screenSaverTime = 10;
-        var actualizacionJSONtime = 40;
+        var screenSaverTime = 20;
+        var actualizacionJSONtime = 80;
         
         let popUp = new PIXI.Graphics();
         var inputLabel ;
@@ -503,10 +525,12 @@
                 estadoAnimacion = 4;
                 //agregaBackColor();  //agrega color atras del mosaico
                 
-                
+                //Zscaler pruebas
                 agregaBackground(); //agrega el jpg original
+                
                 agregaCuadricula(); //agrega las fotos a desplegar 
                 
+                //Zscaler pruebas
                 agregaOverlayImagen(); //agrega la imagen de overlay
                 //agregaOverlayTransparente(); //Grid cuadricula
                 //agregaBienvenida();
@@ -694,7 +718,8 @@
                 break;
                 case 2:
                     timer += 1;
-                    if (ganadorTrivia.includes(randomIndex)){
+                    // if (randomIndex === ganadorTrivia.id){
+                    if (arrayGanadorTrivia.includes(randomIndex)){
                         if (iniciaConfetti) {
                             setupConfetti()
                             iniciaConfetti=false
@@ -1057,7 +1082,7 @@
                 // background.lineStyle(5, 0x00ff00);
                 //background.beginFill(0xff0000);
                 //background.drawCircle(0,0, background.width/2);
-                img.alpha = 0.70; //ALPHA de overlay para que se vea completo
+                img.alpha = 0.30; //ALPHA de overlay para que se vea completo
                 //background.drawRect(0, 0, maxsize, maxsize);
                 //background.endFill();
                 overlay = img;
@@ -1554,9 +1579,9 @@
                         let x = img.x - cWidth / 2;
                         let y = img.y - cHeight / 2;
 			//BLANCO
-                        //realPath.lineStyle(2, 0xFFFFFF, 1);
+                        realPath.lineStyle(2, 0xFFFFFF, 1);
 			//NEGRO
-                        realPath.lineStyle(2, 0x000000, 1);
+                        // realPath.lineStyle(2, 0x000000, 1);
                         realPath.moveTo(x, y);
                         realPath.lineTo(x, y + img.height);
                         realPath.lineTo(x + img.width, y + img.height);
@@ -1585,9 +1610,9 @@
                         let x = img.x - cWidth / 2;
                         let y = img.y - cHeight / 2;
 			//BLANCO
-                        //realPath.lineStyle(2, 0xFFFFFF, 1);
+                        realPath.lineStyle(2, 0xFFFFFF, 1);
 			//NEGRO
-                        realPath.lineStyle(2, 0x000000, 1);
+                        // realPath.lineStyle(2, 0x000000, 1);
                         realPath.moveTo(x, y);
                         realPath.lineTo(x, y + img.height);
                         realPath.lineTo(x + img.width, y + img.height);
