@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Ganadores</title>
+</head>
+<body onload="cargaGanadores()">
+    <h1>Página para indicar que usuarios son ganadores</h1>
+
+    <h2>Lista de Ganadores: 
+    <input type="text" name="" id="texto">
+    <button type="button" onclick="guardar()">Guardar</button>
+    </h2>
+    <script>
+        let arrayGanadorTrivia = []
+        function guardar(){
+            console.log("guardar")
+            let str = document.getElementById("texto").value
+            let jsonFileDate = 'https://mosaico.app:3000/dbGanadorTriviaGuardar?value=' + str
+            fetch(jsonFileDate)
+                .then(response => response.json())
+                .then(data => {
+                    window.alert(data.Resultado);
+                })
+                .catch(error =>{ 
+                    window.alert('Error:', error);
+                })
+        }
+
+        function cargaGanadores(){
+            let jsonFileDate = 'https://mosaico.app:3000/dbGanadorTrivia'
+            fetch(jsonFileDate)
+                .then(response => response.json())
+                .then(data => {
+                    arrayGanadorTrivia = [];
+                    for (var key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            var item = data[key];
+                            arrayGanadorTrivia.push(
+                                item
+                            );
+                        }
+                    }
+                    console.log('DB arrayGanadorTrivia:' + arrayGanadorTrivia.length);
+                    document.getElementById("texto").value = arrayGanadorTrivia.toString()
+                })
+                .catch(error =>{ 
+                    console.error('Error:', error);
+                })
+        }
+
+    </script>
+</body>
+</html>

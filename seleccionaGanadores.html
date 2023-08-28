@@ -29,6 +29,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.8/pixi.min.js"></script>
     <!-- <script src="PIXI.TextInput.min.js"></script> -->
     <script type="text/javascript">
+        "use strict";
         const canvas = document.getElementById('myCanvas');
         const app = new PIXI.Application({
             view: canvas,
@@ -48,6 +49,9 @@
         let resizeFactor = 2;
         let velocidadAnimacionFactor = 4;
         let alphaCuadricula = 0.70;
+        let textoEnPantalla = false
+        let factorAnimacionGanadores = 1.0
+        let basicText
         let catalogoTiposPantalla = {"vertical" : 1, "horizontal":2}
         let tipoPantalla = catalogoTiposPantalla.vertical
         // console.log('prueba')
@@ -118,7 +122,6 @@
                 if(a.getTime() > ultimaActualizacionJSON){
                     ultimaActualizacionJSON = a.getTime();
                     console.log("Si hay actualización Json, vamos por fotos")
-                    arrayScreenSaver = []
                     actualizaJSON();
                 }else{
                     terminamosLoading=3;
@@ -128,7 +131,7 @@
             .catch(error =>{ 
                 console.error('Error:', error);
                 terminamosLoading = 3;
-                })
+            })
     }
 
     function actualizaJSON(){
@@ -380,8 +383,8 @@
         let imgAnimacion = new PIXI.Sprite(texture);
         // imgAnimacion.width = 1000;
         // imgAnimacion.height = 1000;
-        imgAnimacion.anchor.x = .5;
-        imgAnimacion.height.y = .5;
+        imgAnimacion.anchor.x = 0.5;
+        imgAnimacion.anchor.y = 0.5;
         imgAnimacion.x = centroMosaicoX;
         imgAnimacion.y = centroMosaicoY;
         
@@ -527,12 +530,12 @@
                 //agregaBackColor();  //agrega color atras del mosaico
                 
                 //Zscaler pruebas
-                agregaBackground(); //agrega el jpg original
+                // agregaBackground(); //agrega el jpg original
                 
                 agregaCuadricula(); //agrega las fotos a desplegar 
                 
                 //Zscaler pruebas
-                agregaOverlayImagen(); //agrega la imagen de overlay
+                // agregaOverlayImagen(); //agrega la imagen de overlay
                 //agregaOverlayTransparente(); //Grid cuadricula
                 //agregaBienvenida();
 
@@ -640,7 +643,7 @@
                         estadoAnimacion = 0;
                         terminamosLoading = 4
                     } else {
-                        animate2();
+                        //animate2();
                     }
 
                 }
@@ -720,6 +723,23 @@
                 case 2:
                     timer += 1;
                     // if (randomIndex === ganadorTrivia.id){
+                    if(textoEnPantalla == false){
+                        const style = new PIXI.TextStyle({
+                        fontFamily: 'Arial',
+                        fontSize: 70,
+                        fontStyle: 'italic',
+                        fontWeight: 'bold',
+                        fill: ['#000000', '#ff0000'], // gradient
+                        })
+                        basicText = new PIXI.Text('Coordenadas: ' + randomIndex,style);
+                        basicText.x = 250;
+                        basicText.y = 1600;
+
+                        app.stage.addChild(basicText);
+                        textoEnPantalla = true
+                    }
+                        
+
                     if (arrayGanadorTrivia.includes(randomIndex)){
                         if (iniciaConfetti) {
                             setupConfetti()
@@ -750,6 +770,8 @@
                         imagenParaAnimar=0
                         iniciaConfetti=true
                         estadoAnimacion = 4;
+                        app.stage.removeChild(basicText);
+                        textoEnPantalla = false
                     }else if (timer >= (confettiAnimacionTimer* factorAnimacionGanadores)) {
                         imgAnimacion.alpha -= 1/confettiAnimacionTimer; 
                     }
@@ -889,7 +911,7 @@
                     if (resultadoY > velocidadAnimacionFactor) {
                         finalY = velocidadAnimacionFactor;
                     } else {
-                        finaly = resultadoY;
+                        finalY = resultadoY;
                     }
                 } else if (resultadoY < 0) {
                     if ((Math.abs(resultadoY) > velocidadAnimacionFactor)) {
@@ -1534,8 +1556,8 @@
             
             function agregaCuadricula(){
             const textureDemo = PIXI.Texture.EMPTY;
-            for (i = 0; i < (cuadriculaVertial); i++) {
-                for (j = 0; j < (cuadriculaHorizontal); j++) {
+            for (let i = 0; i < (cuadriculaVertial); i++) {
+                for (let j = 0; j < (cuadriculaHorizontal); j++) {
                     // console.log('foto:' + arrayNombresFotos[index].nombreFoto + 'agregaCuadricula:' + (arrayNombresFotos[index].Hotzone == 'true'))
                     
                     if (arrayNombresFotos[index].check == true){
